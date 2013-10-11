@@ -1,5 +1,16 @@
 var app = {
 
+
+	anandJoshi: function (message, title) {
+	 console.log(message);
+		if (navigator.notification) {
+			navigator.notification.alert(message, null, title, 'OK');
+		} else {
+			alert(title ? (title + ": " + message) : message);
+		}
+	},
+	
+	
     findByName: function() {
         console.log('findByName');
         this.store.findByName($('.search-key').val(), function(employees) {
@@ -13,19 +24,11 @@ var app = {
         });
     },
 	
-	showAlert: function (message, title) {
-		if (navigator.notification) {
-			navigator.notification.alert(message, null, title, 'OK');
-		} else {
-			alert(title ? (title + ": " + message) : message);
-		}
-	},
+	
 
     initialize: function() {
-	
-			alert(self);
         this.store = new MemoryStore(function(){
-			self.showAlert('Store Initialized', 'Info');
+			app.anandJoshi('Store Initialized', 'Info');
 		});
         $('.search-key').on('keyup', $.proxy(this.findByName, this));
     }
