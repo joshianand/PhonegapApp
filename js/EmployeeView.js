@@ -73,11 +73,9 @@ var EmployeeView = function(employee) {
 					app.showAlert('Error taking picture', 'Error');
 				},
 				options);
-			
 		}
 		return false;
 	};
- 
  }
 
 
