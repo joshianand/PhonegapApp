@@ -6,6 +6,7 @@ var EmployeeView = function(employee) {
         this.el = $('<div/>');
 		this.el.on('click', '.add-location-btn', function(event) { selfie.addLocation(event); });
 		this.el.on('click', '.add-contact-btn', function(event) { selfie.addToContacts(event); });
+		this.el.on('click', '.change-pic-btn', function(event) { selfie.changePicture(event); });
 	};
  
     this.initialize();
@@ -17,11 +18,14 @@ var EmployeeView = function(employee) {
 	
 	this.addToContacts = function(event) {
 		event.preventDefault();
-		console.log('addToContacts');
+		
 		if (!navigator.contacts) {
-			this.app.showAlert("Contacts API not supported", "Error");
+			app.showAlert("Contacts API not supported", "Error");
+			console.log('herer');
 			return;
 		}
+		//console.log(navigator.contacts.save());
+		console.log('addToContacts');
 		var contact = navigator.contacts.create();
 		contact.name = {givenName: employee.firstName, familyName: employee.lastName};
 		var phoneNumbers = [];
@@ -29,6 +33,7 @@ var EmployeeView = function(employee) {
 		phoneNumbers[1] = new ContactField('mobile', employee.cellPhone, true); // preferred number
 		contact.phoneNumbers = phoneNumbers;
 		contact.save();
+		app.showAlert(employee.firstName + " Contacts saved Successfully", "Success");
 		return false;
 	};
 	
@@ -42,6 +47,35 @@ var EmployeeView = function(employee) {
 			function() {
 				alert('Error getting location');
 			});
+		return false;
+	};
+	
+	this.changePicture = function(event) {
+		event.preventDefault();
+		console.log('ChangePicture');
+		if(!navigator.camera) {
+		
+			app.showAlert(" Baaapani Camera Dila nahi ka ?", "Error");
+		
+		}
+		else {
+		
+			var options =   {   quality: 50,
+                        destinationType: Camera.DestinationType.DATA_URL,
+                        sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+                        encodingType: 0     // 0=JPG 1=PNG
+                    };
+ 
+			navigator.camera.getPicture(
+				function(imageData) {
+					$('.employee-image', this.el).attr('src', "data:image/jpeg;base64," + imageData);
+				},
+				function() {
+					app.showAlert('Error taking picture', 'Error');
+				},
+				options);
+			
+		}
 		return false;
 	};
  
